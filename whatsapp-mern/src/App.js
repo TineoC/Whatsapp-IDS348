@@ -29,6 +29,7 @@ function App() {
         sessionStorage.setItem('picture', person.picture)
         sessionStorage.setItem('name', person.name)
         sessionStorage.setItem('nbf', person.nbf)
+        sessionStorage.setItem('email', person.email)
         // Que me redirija a la página del chat, y lleve las informaciones del usuario
         nav(`/chat/${nbf}`)
       }

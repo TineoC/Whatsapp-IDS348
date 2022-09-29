@@ -1,16 +1,23 @@
 import React from 'react'
 import "./Sidebar.css"
-import { Avatar, IconButton } from "@material-ui/core"
+import { Avatar, IconButton, Button } from "@material-ui/core"
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { SearchOutlined } from '@material-ui/icons';
-import SidebarChat from './SidebarChat'
+import SidebarChat from './SidebarChat';
+import styled from 'styled-components';
 
-function sidebar() {
+function sidebar( { chats }) {
 
     const picture = sessionStorage.getItem('picture')
-    console.log(picture)
+
+    // Tengo que crear un método para que en el onClick me abra alguna ventana o algo que me permita ingresar el email del usuario
+    // Con el mail, tengo que revisar que ese correo y verificarlo en la base de datos
+    // Con eso entonces ver como genero la el elemento del chat, tengo que ver ese fragmento del código del pana
+    // Y Tengo que modificar la estructura de la colección de los mensajes para que contengan alguna clase de identificador único del chat
+    // Y que regule los mensajes mostrados en función de ese identificador, en teoría eso está en el vídeo también
+    // Tengo que hacer un map de los chats que tenga el usuario que inició sesión y enviar esos maps con la informaciones de cada chat?
 
   return (
     <div className='sidebar'>
@@ -28,6 +35,9 @@ function sidebar() {
                 </IconButton>
             </div>
         </div>
+        <div className='sidebar_newchatContainer'>
+            <SidebarButton>Create a new chat</SidebarButton>
+        </div>
         <div className='sidebar_search'>
             <div className="sidebar_searchContainer">
                 <SearchOutlined />
@@ -35,12 +45,21 @@ function sidebar() {
             </div>
         </div>
         <div className='sidebar_chats'>
-            <SidebarChat />
-            <SidebarChat />
-            <SidebarChat />
+            {chats?.map((chat) => (
+                <SidebarChat chat={chat}/>
+            ))}
         </div>
     </div>
   )
 }
 
 export default sidebar
+
+
+const SidebarButton = styled(Button)`
+    width: 100%;
+    align-items: center;
+    border-top: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
+    padding: 5;
+`;

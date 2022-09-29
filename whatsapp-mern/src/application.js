@@ -16,16 +16,15 @@ function Application() {
     });
   }, []);
 
-  /*const [user, setUser] = useState([]);
+  const [chats, setChats] = useState([]);
   useEffect(() => {
-    axios.get('user/login', { params: {
-      id: `${nbf}`
-    }
-  }).then(res => {
-      console.log(res.data)
-      setUser(res.data)
+    axios.get('/chat/search', { params: {
+      users: `${sessionStorage.getItem('email')}`}
+    }).then((response) => {
+      setChats(response.data)
     })
-  }, []);*/
+  }, []);
+
 
   useEffect(() => {
     const pusher = new Pusher('3d8a99912b841f62956d', {
@@ -43,13 +42,10 @@ function Application() {
     };
   }, [messages]);
 
-  const queryString = window.location.search;
-  console.log(queryString);
-
   return (
     <div className="app">
       <div className="app_body">
-        <Sidebar />
+        <Sidebar chats={chats} />
         <Chat messages={messages}/>
       </div>
 

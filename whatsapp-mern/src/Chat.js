@@ -28,7 +28,7 @@ function Chat({ messages }) {
 
     setInput('');
   }
-
+// Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
   return (
     <div className='chat'>
         <div className='chat_header'>
