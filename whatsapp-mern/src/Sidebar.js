@@ -8,12 +8,20 @@ import { SearchOutlined } from '@material-ui/icons';
 import SidebarChat from './SidebarChat';
 import styled from 'styled-components';
 import axios from './axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function sidebar({ chats }) {
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    let nav = useNavigate();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    let location = useLocation();
+
     const picture = sessionStorage.getItem('picture')
     const handleClickChat = (selectedChat) => {
-        console.log(`Vamos a ver si esto funciona ${selectedChat._id}`);
+        console.log(`Este es el id de mi chat: ${selectedChat._id}`);
+        nav(`/chat/${selectedChat._id}`, { state: `${location.state}`});
+        window.location.reload()
     }
 
     // Tengo que crear un método para que en el onClick me abra alguna ventana o algo que me permita ingresar el email del usuario

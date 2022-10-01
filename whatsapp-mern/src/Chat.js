@@ -7,6 +7,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import MicIcon from '@material-ui/icons/Mic';
 import axios from "./axios";
+import { useParams } from 'react-router-dom';
 
 
 function Chat({ messages }) {
@@ -15,6 +16,7 @@ function Chat({ messages }) {
   
   const userName = sessionStorage.getItem('name')
   const [input, setInput] = useState('')
+  let { id } = useParams()
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ function Chat({ messages }) {
         hour: '2-digit',
         minute: '2-digit',
       }),
-      received: false,
+      chat: id
     });
 
     setInput('');
