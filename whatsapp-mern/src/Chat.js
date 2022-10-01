@@ -11,6 +11,8 @@ import axios from "./axios";
 
 function Chat({ messages }) {
 
+  // Tengo que crear un mecanismo que envíe el chat que ha sido seleccionado y lo pase como argumento para acá
+  
   const userName = sessionStorage.getItem('name')
   const [input, setInput] = useState('')
 
@@ -51,7 +53,7 @@ function Chat({ messages }) {
         </div>
         <div className='chat_body'> 
           {messages.map((message) => (
-            <p className={`chat_message ${message.name === sessionStorage.getItem('name') && "chat_receiver"}`}> {/*Para hacer la lógica de autenticación tengo que revisar si el nombre del usuario que envió el mensaje es cual o quién e igual concatenarle lo e receiver*/}
+            <p key={message._id} className={`chat_message ${message.name === sessionStorage.getItem('name') && "chat_receiver"}`}> {/*Para hacer la lógica de autenticación tengo que revisar si el nombre del usuario que envió el mensaje es cual o quién e igual concatenarle lo e receiver*/}
               <span className='chat_name'>{message.name}</span>
               {message.message}
               <span className='chat_timestamp'>{message.timestamp}</span>

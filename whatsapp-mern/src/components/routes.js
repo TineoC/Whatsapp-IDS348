@@ -6,13 +6,11 @@ import ErrorPage from './ErrorPage'
 
 function routes() {
   return (
-    <Router>
-        <Routes>
-            <Route path='/' element={<App />}/>
-            <Route path='/chat/:id' element={<Application />}/>
-            <Route path='*' element={<ErrorPage />}/>
-        </Routes>
-    </Router>
+    <Routes>
+        <Route path='/' element={<App />}/>
+        <Route path='/chat' element={<Application />}/>
+        <Route path='*' element={<ErrorPage />}/>
+      </Routes>
   )
 }
 

@@ -4,10 +4,14 @@ import Chat from "./Chat";
 import Sidebar from "./Sidebar"
 import Pusher from "pusher-js";
 import axios from "./axios";
+import { useLocation } from "react-router-dom";
 
 function Application() {
 
   // Tengo que hacer un botón de SignOut que me envíe al Login y que también elimine las variables de sesión
+
+  const location = useLocation()
+
 
   const [messages, setMessages] = useState([]);
   useEffect(() => {
@@ -19,7 +23,7 @@ function Application() {
   const [chats, setChats] = useState([]);
   useEffect(() => {
     axios.get('/chat/search', { params: {
-      users: `${sessionStorage.getItem('email')}`}
+      users: `${location.state}`}
     }).then((response) => {
       setChats(response.data)
     })
