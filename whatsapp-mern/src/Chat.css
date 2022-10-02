@@ -1,7 +1,7 @@
 .chat{
     display: flex;
     flex-direction: column;
-    flex: 0.65;
+    flex: 0.7;
 }
 
 .chat_header {
@@ -38,14 +38,19 @@
     font-size: 16px;
     padding: 10px;
     width: fit-content;
+    max-width: 60%;
+    min-width: 10%;
     border-radius: 10px;
     background-color: #ffffff;
     margin-bottom: 30px;
+    overflow-wrap: break-word;
+    justify-content: right  ;
 }
 
 .chat_receiver {
     margin-left: auto;
     background-color: #dcf8c6;
+    overflow-wrap: break-word;
 }
 
 .chat_timestamp {
@@ -79,6 +84,7 @@
     border-radius: 30px;
     padding: 10px;
     border: none;
+    overflow-wrap: break-word;
 }
 
 .chat_footer > form > button{

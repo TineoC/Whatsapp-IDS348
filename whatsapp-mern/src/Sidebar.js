@@ -8,7 +8,7 @@ import { SearchOutlined } from '@material-ui/icons';
 import SidebarChat from './SidebarChat';
 import styled from 'styled-components';
 import axios from './axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { unstable_HistoryRouter, useLocation, useNavigate } from 'react-router-dom';
 
 function sidebar({ chats }) {
 
@@ -19,11 +19,15 @@ function sidebar({ chats }) {
 
     const picture = sessionStorage.getItem('picture')
     const handleClickChat = (selectedChat) => {
-        console.log(`Este es el id de mi chat: ${selectedChat._id}`);
         nav(`/chat/${selectedChat._id}`, { state: `${location.state}`});
         window.location.reload()
     }
 
+    const handleSignOut = () =>{
+        sessionStorage.removeItem('picture')
+        sessionStorage.removeItem('name')
+        nav('/', {replace: true})
+    }
     // Tengo que crear un método para que en el onClick me abra alguna ventana o algo que me permita ingresar el email del usuario
     // Con el mail, tengo que revisar que ese correo y verificarlo en la base de datos
     // Con eso entonces ver como genero la el elemento del chat, tengo que ver ese fragmento del código del pana
@@ -34,7 +38,9 @@ function sidebar({ chats }) {
   return (
     <div className='sidebar'>
         <div className='sidebar_header'>
-            <Avatar src={picture}/>
+            <div onClick={ () => handleSignOut()}>
+                <Avatar src={picture}/>
+            </div>
             <div className='sidebar_headerRight'>
                 <IconButton>
                     <DonutLargeIcon />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Chat.css"
 import { Avatar, IconButton } from "@material-ui/core"
 import SearchIcon from '@material-ui/icons/Search';
@@ -32,14 +32,23 @@ function Chat({ messages }) {
 
     setInput('');
   }
+
+  const [chat, setChat] = useState([]);
+  useEffect(() => {
+    axios.get('/chat/search', { params: {
+      _id: `${id}`}
+    }).then((response) => {
+      setChat(response.data)
+    })
+  }, []);
+
 // Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
   return (
     <div className='chat'>
         <div className='chat_header'>
-          <Avatar />
+          <Avatar>{chat[0]?.name.charAt(0)}</Avatar>
           <div className='chat_headerInfo'>
-            <h3>Room name</h3>
-            <p>Última vez visto...</p>
+            <h3>{chat[0]?.name}</h3>
           </div>
           <div className='chat_headerRight'>
                 <IconButton>
