@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Sidebar.css"
 import { Avatar, IconButton, Button } from "@material-ui/core"
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
@@ -7,8 +7,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { SearchOutlined } from '@material-ui/icons';
 import SidebarChat from './SidebarChat';
 import styled from 'styled-components';
-import axios from './axios';
-import { unstable_HistoryRouter, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Modal from './components/Modal'
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 function sidebar({ chats }) {
 
@@ -16,6 +18,7 @@ function sidebar({ chats }) {
     let nav = useNavigate();
     // eslint-disable-next-line react-hooks/rules-of-hooks
     let location = useLocation();
+    const animatedComponents = makeAnimated();
 
     const picture = sessionStorage.getItem('picture')
     const handleClickChat = (selectedChat) => {
@@ -28,12 +31,20 @@ function sidebar({ chats }) {
         sessionStorage.removeItem('name')
         nav('/', {replace: true})
     }
-    // Tengo que crear un método para que en el onClick me abra alguna ventana o algo que me permita ingresar el email del usuario
-    // Con el mail, tengo que revisar que ese correo y verificarlo en la base de datos
-    // Con eso entonces ver como genero la el elemento del chat, tengo que ver ese fragmento del código del pana
-    // Y Tengo que modificar la estructura de la colección de los mensajes para que contengan alguna clase de identificador único del chat
-    // Y que regule los mensajes mostrados en función de ese identificador, en teoría eso está en el vídeo también
-    // Tengo que hacer un map de los chats que tenga el usuario que inició sesión y enviar esos maps con la informaciones de cada chat?
+
+    const colourOptions = [
+        { value: 'Red', label: 'Red' },
+        { value: 'Orange', label: 'Orange' },
+        { value: 'Yellow', label: 'Yellow' },
+        { value: 'Green', label: 'Green' },
+        { value: 'Light Blue', label: 'Light Blue' },
+        { value: 'Blue', label: 'Blue' },
+        { value: 'Purple', label: 'Purple' },
+        { value: 'Pink', label: 'Pink' }
+        ]
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [show, setShow] = useState(false);
 
   return (
     <div className='sidebar'>
@@ -54,7 +65,15 @@ function sidebar({ chats }) {
             </div>
         </div>
         <div className='sidebar_newchatContainer'>
-            <SidebarButton>Create a new chat</SidebarButton>
+            <SidebarButton onClick={() => setShow(true)} >Create a new chat</SidebarButton>
+            <Modal title="Create new chat" onClose={() => setShow(false)} show={show}>
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={colourOptions}
+            />
+            </Modal>
         </div>
         <div className='sidebar_search'>
             <div className="sidebar_searchContainer">

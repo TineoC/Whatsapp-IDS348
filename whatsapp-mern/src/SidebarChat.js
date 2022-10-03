@@ -13,7 +13,7 @@ function SidebarChat({ chat }) {
       cluster: 'us2',
     });
 
-    const channel = pusher.subscribe('messages');
+    const channel = pusher.subscribe('messages'); // Ver como modifico el método para lo filtre por el chat
     channel.bind('inserted', (newMessage) => {
       setLastMessage([...lastmessage, newMessage]);
     });
@@ -31,6 +31,7 @@ function SidebarChat({ chat }) {
         <Avatar>{chat.name.charAt(0)}</Avatar>
         <div className='sidebarChat_info'>
             <h2>{chat.name}</h2>
+            <p>Aqui es que va el mensaje</p>
             <script>document.getElementById('lastMessage').innerHTML = {lastmessage[lastmessage.length - 1]?.message}</script>
         </div>
     </div>
