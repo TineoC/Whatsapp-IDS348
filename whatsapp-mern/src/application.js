@@ -30,6 +30,7 @@ function Application() {
     axios.get('/chat/search', { params: {
       users: `${location.state}`}
     }).then((response) => {
+      console.log(location)
       setChats(response.data)
     })
   }, []);
