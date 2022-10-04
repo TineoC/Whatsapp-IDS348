@@ -11,8 +11,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from './components/Modal'
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import axios from "./axios";
 
-function sidebar({ chats }) {
+function Sidebar({ chats }) {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     let nav = useNavigate();
@@ -45,6 +46,16 @@ function sidebar({ chats }) {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [show, setShow] = useState(false);
+
+    const [contacts, setContacts] = useState([]);
+    useEffect(() => {
+      axios.get('/user/byName', { params: {
+        users: `${location.state}`}
+      }).then((response) => {
+        console.log(location)
+        setContacts(response.data)
+      })
+    }, []);
 
   return (
     <div className='sidebar'>
@@ -92,7 +103,7 @@ function sidebar({ chats }) {
   )
 }
 
-export default sidebar;
+export default Sidebar;
 
 
 const SidebarButton = styled(Button)`

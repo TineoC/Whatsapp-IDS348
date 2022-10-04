@@ -9,7 +9,6 @@ import MicIcon from '@material-ui/icons/Mic';
 import axios from "./axios";
 import { useParams } from 'react-router-dom';
 
-
 function Chat({ messages }) {
 
   // Tengo que crear un mecanismo que envíe el chat que ha sido seleccionado y lo pase como argumento para acá
@@ -55,7 +54,10 @@ function Chat({ messages }) {
                     <SearchIcon />
                 </IconButton>
                 <IconButton>
-                    <AttachFileIcon />
+                   <AttachFileIcon/>
+                   <div class="file-select" id="src-file1" >
+                      <input type="file" name="src-file1" aria-label="Archivo"/>
+                    </div>
                 </IconButton>
                 <IconButton>
                     <MoreVertIcon />

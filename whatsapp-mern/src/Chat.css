@@ -95,3 +95,27 @@
     padding: 10px;
     color: gray;
 }
+.file-select {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .file-select::before {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .file-select input[type="file"] {
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+  }
