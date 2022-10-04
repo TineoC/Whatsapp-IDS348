@@ -114,6 +114,16 @@ app.post('/user/new', (req, res) => {
     })
 })
 
+app.get('/user/byName', (req, res) => {
+    Users.find(req.query, (err, data) => {
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            res.status(200).send(data)
+        }
+    })
+})
+
 // Tengo que agregar el método para crear el chat con un /chat/new
 
 
