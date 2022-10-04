@@ -46,7 +46,7 @@ function Chat({ messages }) {
   return (
     <div className='chat'>
         <div className='chat_header'>
-          <Avatar>{chat[0]?.name.charAt(0)}</Avatar>
+          <Avatar src={chat[0]?.picture}></Avatar>
           <div className='chat_headerInfo'>
             <h3>{chat[0]?.name}</h3>
           </div>

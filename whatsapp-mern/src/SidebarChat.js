@@ -28,7 +28,7 @@ function SidebarChat({ chat }) {
 
   return (
     <div className='sidebarChat'>
-        <Avatar>{chat.name.charAt(0)}</Avatar>
+        <Avatar src={chat.picture}></Avatar>
         <div className='sidebarChat_info'>
             <h2>{chat.name}</h2>
             <p>Aqui es que va el mensaje</p>

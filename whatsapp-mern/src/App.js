@@ -44,6 +44,7 @@ function App() {
     )
 
     google.accounts.id.prompt();
+
   }, []);
 
   return (
