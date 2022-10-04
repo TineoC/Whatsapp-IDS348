@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import "./Chat.css"
 import { Avatar, IconButton } from "@material-ui/core"
 import SearchIcon from '@material-ui/icons/Search';
+import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
-import MicIcon from '@material-ui/icons/Mic';
 import axios from "./axios";
 import { useParams } from 'react-router-dom';
 
@@ -53,12 +53,19 @@ function Chat({ messages }) {
                 <IconButton>
                     <SearchIcon />
                 </IconButton>
-                <IconButton>
-                   <AttachFileIcon/>
-                   <div class="file-select" id="src-file1" >
-                      <input type="file" name="src-file1" aria-label="Archivo"/>
-                    </div>
-                </IconButton>
+                <Fragment>
+                <input
+                    accept="image/*"
+                    id="icon-button-photo"
+                    type="file"
+                    hidden="true"
+                />
+                <label htmlFor="icon-button-photo">
+                    <IconButton component="span">
+                        <AttachFileIcon />
+                    </IconButton>
+                </label>
+                </Fragment>
                 <IconButton>
                     <MoreVertIcon />
                 </IconButton>
@@ -80,10 +87,10 @@ function Chat({ messages }) {
           </IconButton>
           <form>
             <input value={input} onChange={e => setInput(e.target.value)} placeholder='Mensaje' type="text" />
-            <button onClick={sendMessage} type="sumbit">Enviar</button>
+            <button onClick={sendMessage} type="sumbit"></button>
           </form>
           <IconButton>
-            <MicIcon />
+            <SendRoundedIcon />
           </IconButton>
         </div>
 

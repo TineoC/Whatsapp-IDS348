@@ -15,9 +15,7 @@ import axios from "./axios";
 
 function Sidebar({ chats }) {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     let nav = useNavigate();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     let location = useLocation();
     const animatedComponents = makeAnimated();
 
@@ -44,7 +42,6 @@ function Sidebar({ chats }) {
         { value: 'Pink', label: 'Pink' }
         ]
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [show, setShow] = useState(false);
 
     const [contacts, setContacts] = useState([]);
