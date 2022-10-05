@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid lightgray;
+    height: 47px;
 }
 
 .chat_headerInfo {

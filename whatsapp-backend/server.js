@@ -5,6 +5,7 @@ import cors from "cors";
 import Messages from "./dbMessages.js";
 import Users from "./dbUsers.js"
 import Chats from "./dbChats.js"
+import Contacts from "./dbContacts.js";
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -104,7 +105,6 @@ app.post('/messages/new', (req, res) => {
 
 app.post('/user/new', (req, res) => {
     const dbUser = req.body
-
     Users.create(dbUser, (err, data) => {
         if(err) {
             res.status(500).send(err)
@@ -114,8 +114,8 @@ app.post('/user/new', (req, res) => {
     })
 })
 
-app.get('/user/byName', (req, res) => {
-    Users.find(req.query, (err, data) => {
+app.get('/contact/search', (req, res) => {
+    Contacts.find(req.query, (err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {
@@ -123,6 +123,48 @@ app.get('/user/byName', (req, res) => {
         }
     })
 })
+
+
+app.post('/contact/create', (req, res) => {
+    const dbContact = req.body
+    Contacts.create(dbContact, (err, data) => {
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            res.status(201).send(`contenido contacto creado: \n ${data}`)
+        }
+    })
+})
+
+app.post('/contact/add', (req, res) => {
+    const dbContacts = req.body
+    Contacts.updateOne(dbContacts, (err, data) => {
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            res.status(201).send(`Nuevo contacto agregado: \n ${data}`)
+        }
+    })
+})
+
+app.get('/contact/select', (req, res) => {
+    const dbSelect = req.query.email
+    Contacts.aggregate( [
+        {
+           $lookup: {
+              from: "usercontents",
+              localField: "email",    // field in the orders collection
+              foreignField: "email",  // field in the items collection
+              as: "selectList"
+           }
+        },
+        {
+           $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$selectList", 0 ] }, "$$ROOT" ] } }
+        },
+        { $project: { selectList: 0 } }
+     ] )
+})
+
 
 // Tengo que agregar el método para crear el chat con un /chat/new
 

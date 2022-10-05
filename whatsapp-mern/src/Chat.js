@@ -37,18 +37,27 @@ function Chat({ messages }) {
     axios.get('/chat/search', { params: {
       _id: `${id}`}
     }).then((response) => {
+      var div = document.getElementById('chat_header');
+      div.style.visibility = 'visible';
       setChat(response.data)
     })
   }, []);
 
+  console.log(chat)
+
 // Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
-  return (
-    <div className='chat'>
-        <div className='chat_header'>
+return (
+  <div className='chat'>
+        <div id='chat_header' className='chat_header'>
+        {chat.length !== 0 &&
           <Avatar src={chat[0]?.picture}></Avatar>
+        }
+          {chat.length !== 0 &&
           <div className='chat_headerInfo'>
             <h3>{chat[0]?.name}</h3>
           </div>
+          }
+          {chat.length !== 0 &&
           <div className='chat_headerRight'>
                 <IconButton>
                     <SearchIcon />
@@ -59,7 +68,7 @@ function Chat({ messages }) {
                     id="icon-button-photo"
                     type="file"
                     hidden="true"
-                />
+                    />
                 <label htmlFor="icon-button-photo">
                     <IconButton component="span">
                         <AttachFileIcon />
@@ -70,6 +79,7 @@ function Chat({ messages }) {
                     <MoreVertIcon />
                 </IconButton>
             </div>
+          }
         </div>
         <div className='chat_body'> 
           {messages.map((message) => (
