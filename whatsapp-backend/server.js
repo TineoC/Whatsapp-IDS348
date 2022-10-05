@@ -115,7 +115,8 @@ app.post('/user/new', (req, res) => {
 })
 
 app.get('/contact/search', (req, res) => {
-    Contacts.find(req.query, (err, data) => {
+    const dbUser = req.query
+    Contacts.find(dbUser, {"_id":0, "email": 0, "__v": 0}, (err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {
@@ -164,9 +165,5 @@ app.get('/contact/select', (req, res) => {
         { $project: { selectList: 0 } }
      ] )
 })
-
-
-// Tengo que agregar el método para crear el chat con un /chat/new
-
 
 app.listen(port, () => console.log(`Listening on localhost: ${port}`))
