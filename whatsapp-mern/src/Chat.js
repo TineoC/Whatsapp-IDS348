@@ -43,8 +43,6 @@ function Chat({ messages }) {
     })
   }, []);
 
-  console.log(chat)
-
 // Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
 return (
   <div className='chat'>

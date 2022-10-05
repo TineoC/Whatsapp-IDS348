@@ -43,21 +43,27 @@ function Sidebar({ chats }) {
         ]
 
     const [show, setShow] = useState(false);
-
-    const [contacts, setContacts] = useState([]);
-    useEffect(() => {
-      axios.get('/user/byName', { params: {
-        users: `${location.state}`}
+    
+    const [specificChat, setSpecificChat] = useState([]);
+    const [input, setInput] = useState('');
+    const searchChat = () =>  {
+      axios.get('/chat/searchBy', {
+        params: {
+          main: `${location.state}`,
+          find: `${input}`
+        }
       }).then((response) => {
-        console.log(location)
-        setContacts(response.data)
+        // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
+        setSpecificChat(response.data) 
+        chats = specificChat
+        console.log(chats) 
       })
-    }, []);
+    }
 
   return (
     <div className='sidebar'>
         <div className='sidebar_header'>
-            <div onClick={ () => handleSignOut()}>
+            <div onClick={() => handleSignOut()}>
                 <Avatar src={picture}/>
             </div>
             <div className='sidebar_headerRight'>
@@ -86,12 +92,13 @@ function Sidebar({ chats }) {
         <div className='sidebar_search'>
             <div className="sidebar_searchContainer">
                 <SearchOutlined />
-                <input placeholder='Busque o inicie un nuevo chat' type="text"/>
+                <input onChange={e => setInput(e.target.value)} placeholder='Busque o inicie un nuevo chat' type="text" value={input}/>
+                <button onClick={() => searchChat()} type="sumbit">Search</button>
             </div>
         </div>
         <div className='sidebar_chats'>
             {chats?.map((chat) => (
-                <div key={chat._id} onClick={ () => handleClickChat(chat)}>
+                <div key={chat._id} onClick={() => handleClickChat(chat)}>
                     <SidebarChat chat={chat} />
                 </div>
             ))}

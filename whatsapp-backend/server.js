@@ -80,6 +80,16 @@ app.get('/chat/search', (req, res) => {
     })
 })
 
+app.get('/chat/searchBy', (req, res) => {
+    Chats.find( {users: { $all: [ req.query.main, req.query.find ]}} ,(err, data) => { 
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            res.status(200).send(data)
+        }
+    })
+})
+
 app.get('/chat/get', (req, res) => {
     Chats.find(req.query, (err, data) => {
         if(err) {
@@ -89,7 +99,6 @@ app.get('/chat/get', (req, res) => {
         }
     })
 })
-
 
 app.post('/messages/new', (req, res) => {
     const dbMessage = req.body
@@ -116,7 +125,7 @@ app.post('/user/new', (req, res) => {
 
 app.get('/contact/search', (req, res) => {
     const dbUser = req.query
-    Contacts.find(dbUser, {"_id":0, "email": 0, "__v": 0}, (err, data) => {
+    Contacts.find(dbUser, {"_id":0, "email":0, "__v": 0}, (err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {
@@ -124,7 +133,6 @@ app.get('/contact/search', (req, res) => {
         }
     })
 })
-
 
 app.post('/contact/create', (req, res) => {
     const dbContact = req.body
@@ -148,22 +156,37 @@ app.post('/contact/add', (req, res) => {
     })
 })
 
-app.get('/contact/select', (req, res) => {
-    const dbSelect = req.query.email
-    Contacts.aggregate( [
+app.get('/contact/select', (req, res) => { // Tengo que pasarle los parametros definiendolos jevi como en el chat/search
+    const userEmail = req.query.email
+    Contacts.aggregate([
         {
-           $lookup: {
-              from: "usercontents",
-              localField: "email",    // field in the orders collection
-              foreignField: "email",  // field in the items collection
-              as: "selectList"
-           }
-        },
-        {
-           $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$selectList", 0 ] }, "$$ROOT" ] } }
-        },
-        { $project: { selectList: 0 } }
-     ] )
+           $lookup:
+              {
+                from: "usercontents",
+                localField: "contacts",
+                foreignField: "email",
+                as: "contacts_info"
+             }
+        }
+     ], (err, data) => {
+        if(err) {
+            res.status(500).send(err)
+        } else {
+            res.status(201).send(data)
+        }
+     })
 })
 
 app.listen(port, () => console.log(`Listening on localhost: ${port}`))
+
+/*[
+        {
+           $lookup:
+              {
+                from: "usercontents",
+                localField: "contacts",
+                foreignField: "email",
+                as: "contacts_info"
+             }
+        }
+     ]*/
