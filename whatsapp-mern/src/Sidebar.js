@@ -51,7 +51,8 @@ function Sidebar({ chats }) {
     console.log(contactsOptions)
 
     const [show, setShow] = useState(false);
-    
+    const [showModal, setShowModal] = useState(false);
+
     const [specificChat, setSpecificChat] = useState([]);
     const [input, setInput] = useState('');
     const searchChat = () =>  {
@@ -74,13 +75,14 @@ function Sidebar({ chats }) {
             </div>
             <div className='sidebar_headerRight'>
                 <IconButton>
-                    <DonutLargeIcon />
                 </IconButton>
                 <IconButton>
-                    <ChatIcon />
                 </IconButton>
                 <IconButton>
-                    <MoreVertIcon />
+                    <MoreVertIcon onClick={() => setShowModal(true)} />
+                    <Modal title="Crear contacto" onClose={() => setShowModal(false)} show={showModal}>
+                        <input className="sidebar_searchContainer" placeholder='    Introduzca el email del contacto que desea añadir'></input>
+                    </Modal>
                 </IconButton>
             </div>
         </div>
