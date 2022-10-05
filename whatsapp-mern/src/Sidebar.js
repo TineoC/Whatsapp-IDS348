@@ -43,28 +43,58 @@ function Sidebar({ chats }) {
         })
     }, []);
 
-    const contactsOptions = [
-        list?.map((contact) => (
+    const contactsOptions = list?.map((contact) => (
             { value : contact.email, label : contact.name}
-        ))
-    ]
-    console.log(contactsOptions)
+        ));
+
 
     const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
     
     const [specificChat, setSpecificChat] = useState([]);
     const [input, setInput] = useState('');
     const searchChat = () =>  {
         axios.get('/chat/searchBy', {
             params: {
-            main: `${location.state}`,
-            find: `${input}`
+                main: `${location.state}`,
+                find: `${input}`
             }
         }).then((response) => {
             // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
             setSpecificChat(response.data) 
-        })
-}
+        })}
+        
+    const [users, setUsers] = useState([]);
+    let IsGrupo = null;
+    const handleCreateChat = () => {
+        if (users.length === 0){
+            // Me tiene que mandar una alerta que se quiere crear un grupo sin personas
+        }
+        else if (users.length === 1){
+            // Nada, guadar alguna variable o no hacer nada con el tema del nombre y que sé yo
+            IsGrupo = false;
+            setShow(false);
+            handlechatInfo(false);
+        }
+        else if (users.length > 1){
+            // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
+            IsGrupo = true;
+            setShow(false);
+            setShow2(true);
+        }
+    }
+    
+    const [inputName, setInputName] = useState('');
+    const [inputPicture, setInputPicture] = useState('');
+    const handlechatInfo = async (ChatType) => {
+        // Tengo que hacer el método de create chat en server
+        await axios.post('/chat/new', {
+            name: inputName,
+            creationTime : new Date().toLocaleTimeString(),
+            users: users,
+            picture: inputPicture
+          });
+    }
 
   return (
     <div className='sidebar'>
@@ -86,9 +116,19 @@ function Sidebar({ chats }) {
         </div>
         <div className='sidebar_newchatContainer'>
             <SidebarButton onClick={() => setShow(true)} >Create a new chat</SidebarButton>
-            <Modal title="Create new chat" onClose={() => setShow(false)} show={show}>
-                <Select closeMenuOnSelect={false} components={animatedComponents} isMulti options={contactsOptions[0]} />
-            </Modal>
+            <div className='sidebar_modal'>
+                <Modal title="Create new chat" onClose={() => setShow(false)} show={show} onSave={() => handleCreateChat()}>
+                    <Select closeMenuOnSelect={false} components={animatedComponents} isMulti options={contactsOptions} onChange={setUsers}/>
+                </Modal>
+                <Modal title="Enter Group Chat Information" onClose={() => setShow2(false)} show={show2} onSave={() => handlechatInfo(IsGrupo)}>
+                    <form>
+                        <h4>GroupChat Name: </h4>
+                        <input type="text" placeholder="Type the name here..." value={inputName} onChange={e => setInputName(e.target.value)} />
+                        <h4>Insert GroupChat link picture:</h4>
+                        <input type="text" placeholder="Paste link here..." value={inputPicture} onChange={e => setInputPicture(e.target.value)}/>
+                    </form>
+                </Modal>
+            </div>
         </div>
         <div className='sidebar_search'>
             <div className="sidebar_searchContainer">

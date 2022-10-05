@@ -100,6 +100,16 @@ app.get('/chat/get', (req, res) => {
     })
 })
 
+app.post('/chat/new', (req, res) => {
+    Chats.create(req.body, (err, data) =>{
+        if(err) {
+            res.status(500).send(err)
+        } else{
+            res.status(200).send(`nuevo chat creado: \n${data}`)
+        }
+    })
+})
+
 app.post('/messages/new', (req, res) => {
     const dbMessage = req.body
 
@@ -178,15 +188,3 @@ app.get('/contact/select', (req, res) => { // Tengo que pasarle los parametros d
 })
 
 app.listen(port, () => console.log(`Listening on localhost: ${port}`))
-
-/*[
-        {
-           $lookup:
-              {
-                from: "usercontents",
-                localField: "contacts",
-                foreignField: "email",
-                as: "contacts_info"
-             }
-        }
-     ]*/

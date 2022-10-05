@@ -81,3 +81,11 @@
     border-bottom: 1px solid #eee;
   }
   
+  .modal-body > form > input {
+    flex: 1;
+    outline-width: 0;
+    border-radius: 30px;
+    padding: 15px;
+    border: none;
+    overflow-wrap: break-word;
+  }

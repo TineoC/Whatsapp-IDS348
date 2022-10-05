@@ -33,7 +33,7 @@ const Modal = props => {
             <button onClick={props.onClose} className="button">
               Close
             </button>
-            <button className="Save">
+            <button className="Save" onClick={props.onSave}>
               Save
             </button>
           </div>
