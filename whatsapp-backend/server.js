@@ -157,8 +157,8 @@ app.post('/contact/add', (req, res) => {
 })
 
 app.get('/contact/select', (req, res) => { // Tengo que pasarle los parametros definiendolos jevi como en el chat/search
-    const userEmail = req.query.email
-    Contacts.aggregate([
+    Contacts.aggregate([ 
+        {$match : {email: req.query.email}},
         {
            $lookup:
               {

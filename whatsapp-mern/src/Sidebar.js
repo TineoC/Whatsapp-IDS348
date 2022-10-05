@@ -31,34 +31,40 @@ function Sidebar({ chats }) {
         nav('/', {replace: true})
     }
 
-    const colourOptions = [
-        { value: 'Red', label: 'Red' },
-        { value: 'Orange', label: 'Orange' },
-        { value: 'Yellow', label: 'Yellow' },
-        { value: 'Green', label: 'Green' },
-        { value: 'Light Blue', label: 'Light Blue' },
-        { value: 'Blue', label: 'Blue' },
-        { value: 'Purple', label: 'Purple' },
-        { value: 'Pink', label: 'Pink' }
-        ]
+    const [list, setList] = useState([]);
+    useEffect(() => {
+        axios.get('/contact/select', {
+            params: {
+            email: `${location.state}`
+            }
+        }).then((response) => {
+            // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
+            setList(response.data[0]?.contacts_info) 
+        })
+    }, []);
+
+    const contactsOptions = [
+        list?.map((contact) => (
+            { value : contact.email, label : contact.name}
+        ))
+    ]
+    console.log(contactsOptions)
 
     const [show, setShow] = useState(false);
     
     const [specificChat, setSpecificChat] = useState([]);
     const [input, setInput] = useState('');
     const searchChat = () =>  {
-      axios.get('/chat/searchBy', {
-        params: {
-          main: `${location.state}`,
-          find: `${input}`
-        }
-      }).then((response) => {
-        // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
-        setSpecificChat(response.data) 
-        chats = specificChat
-        console.log(chats) 
-      })
-    }
+        axios.get('/chat/searchBy', {
+            params: {
+            main: `${location.state}`,
+            find: `${input}`
+            }
+        }).then((response) => {
+            // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
+            setSpecificChat(response.data) 
+        })
+}
 
   return (
     <div className='sidebar'>
@@ -81,28 +87,33 @@ function Sidebar({ chats }) {
         <div className='sidebar_newchatContainer'>
             <SidebarButton onClick={() => setShow(true)} >Create a new chat</SidebarButton>
             <Modal title="Create new chat" onClose={() => setShow(false)} show={show}>
-            <Select
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                isMulti
-                options={colourOptions}
-            />
+                <Select closeMenuOnSelect={false} components={animatedComponents} isMulti options={contactsOptions[0]} />
             </Modal>
         </div>
         <div className='sidebar_search'>
             <div className="sidebar_searchContainer">
                 <SearchOutlined />
                 <input onChange={e => setInput(e.target.value)} placeholder='Busque o inicie un nuevo chat' type="text" value={input}/>
-                <button onClick={() => searchChat()} type="sumbit">Search</button>
+                <SearchButton onClick={() => searchChat()} type="sumbit">Search</SearchButton>
             </div>
         </div>
-        <div className='sidebar_chats'>
-            {chats?.map((chat) => (
+        {specificChat.length > 0 && 
+        <div className='sidebar_chats_searched'>
+            <h3>Resultados</h3>
+            {specificChat?.map((chat) => (
                 <div key={chat._id} onClick={() => handleClickChat(chat)}>
                     <SidebarChat chat={chat} />
                 </div>
             ))}
-        </div>
+        </div>}
+        {specificChat.length === 0 &&
+        <div className='sidebar_chats'>
+        {chats?.map((chat) => (
+            <div key={chat._id} onClick={() => handleClickChat(chat)}>
+                <SidebarChat chat={chat} />
+            </div>
+        ))}
+    </div>}
     </div>
   )
 }
@@ -112,6 +123,13 @@ export default Sidebar;
 
 const SidebarButton = styled(Button)`
     width: 100%;
+    align-items: center;
+    border-top: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
+    padding: 5;
+`;
+
+const SearchButton = styled(Button)`
     align-items: center;
     border-top: 1px solid whitesmoke;
     border-bottom: 1px solid whitesmoke;
