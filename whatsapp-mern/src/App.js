@@ -20,7 +20,10 @@ function App() {
           email_verified: person.email_verified,
           name: person.name,
           picture: person.picture,
-          id: person.nbf,
+        })
+        axios.post('/contact/create', {
+          email:person.email,
+          contacts:[]
         })
       } 
       sessionStorage.setItem('picture', person.picture)

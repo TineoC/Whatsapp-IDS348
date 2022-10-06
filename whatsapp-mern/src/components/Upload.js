@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UploadServices from 'Upload.Services'
 
 const Upload = (sertImages, images) => {
