@@ -12,15 +12,17 @@ function SidebarChat({ chat }) {
   const [recipient, setRecipient] = useState('');
   useEffect(() => {
     const found = chat.users.findIndex(element => element !== `${location.state}`);
-    setRecipient(chat.users.slice(found))
+    if (found > -1) {
+      setRecipient(chat.users.splice(found, 1))
+    } 
   }, [])
 
   return (
     <div className='sidebarChat'>
-        <Avatar src={chat.picture}></Avatar>
+        <Avatar src={chat.picture.replace(sessionStorage.getItem('picture'), '')}></Avatar>
         <div className='sidebarChat_info'>
         {chat.name === "" && 
-            <h2>{recipient}</h2>
+            <h2>{recipient[0]}</h2>
         }
         {chat.name !== "" && <h2>{chat.name}</h2>}
             <p>Aqui es que va el mensaje</p>

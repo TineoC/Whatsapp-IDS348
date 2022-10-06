@@ -42,14 +42,16 @@ function Sidebar({ chats }) {
         })
     }, []);
 
+    console.log(list) // Ver cómo extraer elemento donde el mail sea igual al del select
+    // Si se encuentra la forma, la vida será bella
+
     const contactsOptions = list?.map((contact) => (
-            { value : contact.email, label : contact.name}
+            { value : contact.email, label : contact.name, picture : contact.picture}
         ));
 
 
     const [show, setShow] = useState(false);
-    const [show2, setShow2] = useState(false);
-    
+    const [show2, setShow2] = useState(false);    
     const [showModal, setShowModal] = useState(false);
 
     const [specificChat, setSpecificChat] = useState([]);
@@ -80,13 +82,16 @@ function Sidebar({ chats }) {
 
     const [users, setUsers] = useState([]);
     const [chatUsers, setChatUsers] = useState([]);
+    const [inputName, setInputName] = useState('');
+    const [inputPicture, setInputPicture] = useState('');
     let IsGrupo = null;
+    console.log(users)
     const handleCreateChat = () => {
         var ChatUsers = [];
         ChatUsers.push(location.state)
         ChatUsers.push(users[0]['value'])
         setChatUsers(ChatUsers)    
-        if (users.length === 0){
+        if (ChatUsers.length === 1){
             // Me tiene que mandar una alerta que se quiere crear un grupo sin personas
         }
         else if (chatUsers.length === 2){
@@ -94,6 +99,8 @@ function Sidebar({ chats }) {
             IsGrupo = false;
             setShow(false);
             handlechatInfo(false);
+            setInputName(chatUsers.toString().replace(',', ''))
+            setInputPicture(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
         else if (chatUsers.length > 2){
             // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
@@ -102,9 +109,6 @@ function Sidebar({ chats }) {
             setShow2(true);
         }
     }
-
-    const [inputName, setInputName] = useState('');
-    const [inputPicture, setInputPicture] = useState('');
     const handlechatInfo = async (ChatType) => {
         // Tengo que hacer el método de create chat en server
         await axios.post('/chat/new', {
