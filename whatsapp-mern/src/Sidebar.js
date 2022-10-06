@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import "./Sidebar.css"
 import { Avatar, IconButton, Button } from "@material-ui/core"
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
-import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { SearchOutlined } from '@material-ui/icons';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SidebarChat from './SidebarChat';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -67,25 +66,30 @@ function Sidebar({ chats }) {
         })}
         
     const [users, setUsers] = useState([]);
+    const [chatUsers, setChatUsers] = useState([]);
     let IsGrupo = null;
     const handleCreateChat = () => {
+        var ChatUsers = [];
+        ChatUsers.push(location.state)
+        ChatUsers.push(users[0]['value'])
+        setChatUsers(ChatUsers)    
         if (users.length === 0){
             // Me tiene que mandar una alerta que se quiere crear un grupo sin personas
         }
-        else if (users.length === 1){
+        else if (chatUsers.length === 2){
             // Nada, guadar alguna variable o no hacer nada con el tema del nombre y que sé yo
             IsGrupo = false;
             setShow(false);
             handlechatInfo(false);
         }
-        else if (users.length > 1){
+        else if (chatUsers.length > 2){
             // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
             IsGrupo = true;
             setShow(false);
             setShow2(true);
         }
     }
-    
+
     const [inputName, setInputName] = useState('');
     const [inputPicture, setInputPicture] = useState('');
     const handlechatInfo = async (ChatType) => {
@@ -93,7 +97,7 @@ function Sidebar({ chats }) {
         await axios.post('/chat/new', {
             name: inputName,
             creationTime : new Date().toLocaleTimeString(),
-            users: users,
+            users: chatUsers,
             picture: inputPicture
           });
     }
@@ -110,7 +114,7 @@ function Sidebar({ chats }) {
                 <IconButton>
                 </IconButton>
                 <IconButton>
-                    <MoreVertIcon onClick={() => setShowModal(true)} />
+                    <PersonAddIcon onClick={() => setShowModal(true)} />
                     <Modal title="Crear contacto" onClose={() => setShowModal(false)} show={showModal}>
                         <input className="sidebar_searchContainer" placeholder='    Introduzca el email del contacto que desea añadir'></input>
                     </Modal>
