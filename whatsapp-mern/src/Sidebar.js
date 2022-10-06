@@ -63,19 +63,18 @@ function Sidebar({ chats }) {
             setSpecificChat(response.data) 
         })}
         
-    const [inputEmailContact, setInputEmailContact] = useState('');
-    const handleContactInfo = async () => {
-        // Tengo que hacer el método de create chat en server
-        await axios.post('/contact/add', {
-            email: location.state,
-            $push : {
-                contacts: inputEmailContact
-            }
-          });
-        setShowModal(false)
-    }
-
-
+        const [inputEmailContact, setInputEmailContact] = useState('');
+        const handleContactInfo = async () => {
+            // Tengo que hacer el método de create chat en server
+            await axios.post('/contact/add', {
+                email: location.state,
+                $push : {
+                    contacts: inputEmailContact
+                }
+              });
+            setShowModal(false)
+        }
+        
     const [users, setUsers] = useState([]);
     const [chatUsers, setChatUsers] = useState([]);
     const [inputName, setInputName] = useState('');
@@ -121,6 +120,7 @@ function Sidebar({ chats }) {
         setShow2(false);
     }
 
+
   return (
     <div className='sidebar'>
         <div className='sidebar_header'>
@@ -134,8 +134,8 @@ function Sidebar({ chats }) {
                 </IconButton>
                 <IconButton>
                     <PersonAddIcon onClick={() => setShowModal(true)} />
-                    <Modal title="Crear contacto" onClose={() => setShowModal(false)} show={showModal}>
-                        <input className="sidebar_searchContainer" placeholder='    Introduzca el email del contacto que desea añadir'></input>
+                    <Modal title="Crear contacto" onClose={() => setShowModal(false)} show={showModal} onSave={() => handleContactInfo()}>
+                        <input className="sidebar_searchContainer" placeholder='    Introduzca el email del contacto que desea añadir' onChange={e => setInputEmailContact(e.target.value)} value={inputEmailContact}></input>
                     </Modal>
                 </IconButton>
             </div>
