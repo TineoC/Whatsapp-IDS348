@@ -96,7 +96,7 @@ function Sidebar({ chats }) {
             ChatUsers.push(users[0]['value'])
             setChatUsers(ChatUsers)
             setShow(false);
-            //handlechatInfo();
+            handlechatInfo();
             setInputName(chatUsers.toString().replace(',', ''))
             setInputPicture(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
