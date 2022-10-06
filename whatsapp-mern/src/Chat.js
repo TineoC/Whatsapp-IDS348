@@ -8,6 +8,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import axios from "./axios";
 import { useLocation, useParams } from 'react-router-dom';
+import EmojiPicker from 'emoji-picker-react';
 
 function Chat({ messages }) {
 
@@ -55,7 +56,11 @@ function Chat({ messages }) {
       return (response.data)
     })
   }
-
+  const [text, setText] = useState("");
+  const [pickerVisible, tooglePicker] = useState(false)
+  const onEmojiClick = (event, emojiObj) =>{
+    setText(text + emojiObj.emoji)
+  };
 // Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
 return (
   <div className='chat'>
@@ -107,7 +112,10 @@ return (
 
         <div className='chat_footer'>
           <IconButton>
-            <InsertEmoticonIcon />
+            <InsertEmoticonIcon onClick={() => tooglePicker(!pickerVisible)}/>
+            {pickerVisible && (<EmojiPicker 
+            pickerStyle={{position: "absolute", bottom: "60px"}}
+            onEmojiClick={onEmojiClick} />)}
           </IconButton>
           <form>
             <input value={input} onChange={e => setInput(e.target.value)} placeholder='Mensaje' type="text" />

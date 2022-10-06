@@ -1,0 +1,7 @@
+import * as React from 'react';
+declare type Props = Readonly<{
+    children: React.ReactNode;
+    className?: string;
+}>;
+export default function Relative({ children, className }: Props): JSX.Element;
+export {};
