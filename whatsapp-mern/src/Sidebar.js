@@ -75,7 +75,6 @@ function Sidebar({ chats }) {
         setShowModal(false)
     }
 
-
     const [users, setUsers] = useState([]);
     const [chatUsers, setChatUsers] = useState([]);
     const [inputPicture, setInputPicture] = useState('');

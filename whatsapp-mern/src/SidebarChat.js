@@ -13,7 +13,6 @@ function SidebarChat({ chat }) {
   useEffect(() => {
     const found = chat.users.findIndex(element => element !== `${location.state}`);
     if (found > -1) {
-      console.log(chat.users.toString().replace(',','').replace(`${location.state}`, ''))
       setRecipient(chat.users.splice(found, 1))
     } 
   }, [])
