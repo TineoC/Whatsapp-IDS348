@@ -56,9 +56,6 @@ function Chat({ messages }) {
     })
   }
 
-  console.log(chat[0]?.picture.replace(sessionStorage.getItem('picture'), ''))
-  // https://lh3.googleusercontent.com/a/ALm5wu1ex2XCBmW2Ts7AGszH0cwh4WHfZMnpmct1bV-kZg=s96-chttps://lh3.googleusercontent.com/a/ALm5wu021uwO8eySfV2rExQxBY1a-fBraV3JQJ2pSCrP=s96-c
-
 // Tengo que suministrar la información del chat en uso para que asuma este tema del nombre
 return (
   <div className='chat'>

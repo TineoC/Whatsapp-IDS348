@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./Sidebar.css"
 import { Avatar, IconButton, Button } from "@material-ui/core"
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { SearchOutlined } from '@material-ui/icons';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SidebarChat from './SidebarChat';
@@ -42,9 +41,6 @@ function Sidebar({ chats }) {
         })
     }, []);
 
-    console.log(list) // Ver cómo extraer elemento donde el mail sea igual al del select
-    // Si se encuentra la forma, la vida será bella
-
     const contactsOptions = list?.map((contact) => (
             { value : contact.email, label : contact.name, picture : contact.picture}
         ));
@@ -84,39 +80,45 @@ function Sidebar({ chats }) {
     const [chatUsers, setChatUsers] = useState([]);
     const [inputName, setInputName] = useState('');
     const [inputPicture, setInputPicture] = useState('');
-    let IsGrupo = null;
-    console.log(users)
+    
+    const selectedUsers = users.map(a => a.value);
+    //const selectedUsers = users['value']?.map((user) => (user.email));
+
+
     const handleCreateChat = () => {
-        var ChatUsers = [];
-        ChatUsers.push(location.state)
-        ChatUsers.push(users[0]['value'])
-        setChatUsers(ChatUsers)    
-        if (ChatUsers.length === 1){
+        console.log(users.length)
+        if (users.length === 0){
             // Me tiene que mandar una alerta que se quiere crear un grupo sin personas
         }
-        else if (chatUsers.length === 2){
-            // Nada, guadar alguna variable o no hacer nada con el tema del nombre y que sé yo
-            IsGrupo = false;
+        else if (users.length === 1){
+            var ChatUsers = [];
+            ChatUsers.push(location.state)
+            ChatUsers.push(users[0]['value'])
+            setChatUsers(ChatUsers)
             setShow(false);
-            handlechatInfo(false);
+            //handlechatInfo();
             setInputName(chatUsers.toString().replace(',', ''))
             setInputPicture(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
-        else if (chatUsers.length > 2){
+        else if (users.length > 1){
             // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
-            IsGrupo = true;
             setShow(false);
             setShow2(true);
+            // Tengo que ver cómo manejo la información de los usuarios para llenar el chatUsers
+            selectedUsers.push(location.state)
+            setChatUsers(selectedUsers)
         }
     }
-    const handlechatInfo = async (ChatType) => {
+    const handlechatInfo = () => {
         // Tengo que hacer el método de create chat en server
-        await axios.post('/chat/new', {
+        console.log(inputName)
+        axios.post('/chat/new', {
             name: inputName,
             creationTime : new Date().toLocaleTimeString(),
             users: chatUsers,
             picture: inputPicture
-          });
+        });
+        setShow2(false);
     }
 
   return (
@@ -144,7 +146,7 @@ function Sidebar({ chats }) {
                 <Modal title="Create new chat" onClose={() => setShow(false)} show={show} onSave={() => handleCreateChat()}>
                     <Select closeMenuOnSelect={false} components={animatedComponents} isMulti options={contactsOptions} onChange={setUsers}/>
                 </Modal>
-                <Modal title="Enter Group Chat Information" onClose={() => setShow2(false)} show={show2} onSave={() => handlechatInfo(IsGrupo)}>
+                <Modal title="Enter Group Chat Information" onClose={() => setShow2(false)} show={show2} onSave={() => handlechatInfo()}>
                     <form>
                         <h4>GroupChat Name: </h4>
                         <input type="text" placeholder="Type the name here..." value={inputName} onChange={e => setInputName(e.target.value)} />
