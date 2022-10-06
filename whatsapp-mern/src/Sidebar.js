@@ -78,12 +78,9 @@ function Sidebar({ chats }) {
 
     const [users, setUsers] = useState([]);
     const [chatUsers, setChatUsers] = useState([]);
-    const [inputName, setInputName] = useState('');
     const [inputPicture, setInputPicture] = useState('');
-    
+    const [inputName, setInputName] = useState('');
     const selectedUsers = users.map(a => a.value);
-    //const selectedUsers = users['value']?.map((user) => (user.email));
-
 
     const handleCreateChat = () => {
         console.log(users.length)
@@ -94,11 +91,11 @@ function Sidebar({ chats }) {
             var ChatUsers = [];
             ChatUsers.push(location.state)
             ChatUsers.push(users[0]['value'])
-            setChatUsers(ChatUsers)
+            //setChatUsers(ChatUsers.toString().replace(',', ''))
             setShow(false);
-            handlechatInfo();
-            setInputName(chatUsers.toString().replace(',', ''))
-            setInputPicture(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
+            handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
+            //setChatUsers(ChatUsers)
+            console.log(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
         else if (users.length > 1){
             // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
@@ -109,14 +106,14 @@ function Sidebar({ chats }) {
             setChatUsers(selectedUsers)
         }
     }
-    const handlechatInfo = () => {
+    const handlechatInfo = (chatusers, name, picture) => {
         // Tengo que hacer el método de create chat en server
-        console.log(inputName)
+        console.log(chatusers, name, picture)
         axios.post('/chat/new', {
-            name: inputName,
+            name: name,
             creationTime : new Date().toLocaleTimeString(),
-            users: chatUsers,
-            picture: inputPicture
+            users: chatusers,
+            picture: picture
         });
         setShow2(false);
     }
@@ -146,7 +143,7 @@ function Sidebar({ chats }) {
                 <Modal title="Create new chat" onClose={() => setShow(false)} show={show} onSave={() => handleCreateChat()}>
                     <Select closeMenuOnSelect={false} components={animatedComponents} isMulti options={contactsOptions} onChange={setUsers}/>
                 </Modal>
-                <Modal title="Enter Group Chat Information" onClose={() => setShow2(false)} show={show2} onSave={() => handlechatInfo()}>
+                <Modal title="Enter Group Chat Information" onClose={() => setShow2(false)} show={show2} onSave={() => handlechatInfo(chatUsers, inputName, inputPicture)}>
                     <form>
                         <h4>GroupChat Name: </h4>
                         <input type="text" placeholder="Type the name here..." value={inputName} onChange={e => setInputName(e.target.value)} />
