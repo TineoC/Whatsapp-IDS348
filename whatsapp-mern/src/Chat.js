@@ -8,7 +8,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
 import axios from "./axios";
 import { useLocation, useParams } from 'react-router-dom';
-import Picker from 'emoji-picker-react';
+import InputEmoji from 'react-input-emoji'
 
 function Chat({ messages }) {
 
@@ -19,8 +19,8 @@ function Chat({ messages }) {
   const [input, setInput] = useState('')
   let { id } = useParams()
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  const sendMessage = async () => {
+    console.log(input)
     await axios.post('/messages/new', {
       message: input,
       name: userName,
@@ -108,24 +108,8 @@ return (
         </div>
 
         <div className='chat_footer'>
-          <IconButton  onClick={() => togglePicker((pickerVisible) => !pickerVisible)}>
-          {pickerVisible && (
-            <Picker
-              pickerStyle={{ position: "absolute", bottom: "60px" }}
-              onEmojiClick={(e, emoji) => {
-                setInput(input + emoji.emoji);
-                togglePicker(false);
-              }}
-            />
-          )}
-          <InsertEmoticonIcon
-            src={"/whatsapp-clone/data.svg"}
-            onClick={() => togglePicker((pickerVisible) => !pickerVisible)}
-          />
-          </IconButton>
           <form>
-            <input value={input} onChange={e => setInput(e.target.value)} placeholder='Mensaje' type="text" />
-            <button onClick={sendMessage} type="sumbit"></button>
+          <InputEmoji value={input} onChange={setInput} cleanOnEnter onEnter={sendMessage} placeholder="Type a message" />
           </form>
           <IconButton>
             <SendRoundedIcon />

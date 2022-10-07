@@ -157,7 +157,7 @@ app.post('/contact/create', (req, res) => {
 
 app.post('/contact/add', (req, res) => {
     const dbContacts = req.body
-    Contacts.updateMany(dbContacts, (err, data) => {
+    Contacts.updateOne(dbContacts, (err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {
