@@ -67,11 +67,11 @@ function Sidebar({ chats }) {
     const handleContactInfo = async () => {
         // Tengo que hacer el método de create chat en server
         await axios.post('/contact/add', {
-            email: location.state,
-            $push : {
-                contacts: inputEmailContact
+            params: {
+                email: `${location.state}`,
+                contact: `${inputEmailContact}` // Aqui va lo que sea que se use para definir el nombre, verificar si es así
             }
-          });
+        });
         setShowModal(false)
     }
 

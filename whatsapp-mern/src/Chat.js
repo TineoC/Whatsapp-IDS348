@@ -108,9 +108,7 @@ return (
         </div>
 
         <div className='chat_footer'>
-          <form>
           <InputEmoji value={input} onChange={setInput} cleanOnEnter onEnter={sendMessage} placeholder="Type a message" />
-          </form>
           <IconButton>
             <SendRoundedIcon />
           </IconButton>

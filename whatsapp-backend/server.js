@@ -156,8 +156,7 @@ app.post('/contact/create', (req, res) => {
 })
 
 app.post('/contact/add', (req, res) => {
-    const dbContacts = req.body
-    Contacts.updateOne(dbContacts, (err, data) => {
+    Contacts.updateOne({email: req.query.email}, {$push: {"contacts": req.query.contact}}, (err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {
