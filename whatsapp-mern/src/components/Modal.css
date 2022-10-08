@@ -85,7 +85,8 @@
     flex: 1;
     outline-width: 0;
     border-radius: 30px;
-    padding: 15px;
+    padding-left: 15px;
     border: none;
+    max-width: 80%;
     overflow-wrap: break-word;
   }

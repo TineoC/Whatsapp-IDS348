@@ -155,8 +155,12 @@ app.post('/contact/create', (req, res) => {
     })
 })
 
-app.post('/contact/add', (req, res) => {
-    Contacts.updateOne({email: req.query.email}, {$push: {"contacts": req.query.contact}}, (err, data) => {
+app.post('/contact/add', (req, res) => {    
+    Contacts.updateOne( 
+        {email: req.body.email}, // Filter
+        {$push: {"contacts": req.body.contacts}}, // Update
+        {upsert: true} // add document with req.body._id if not exists 
+    ,(err, data) => {
         if(err) {
             res.status(500).send(err)
         } else {

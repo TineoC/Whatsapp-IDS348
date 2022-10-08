@@ -64,14 +64,13 @@ function Sidebar({ chats }) {
         })}
         
         const [inputEmailContact, setInputEmailContact] = useState('');
-        const handleContactInfo = async () => {
+        const handleContactInfo = () => {
             // Tengo que hacer el método de create chat en server
-            await axios.post('/contact/add', {
-                params: {
-                    email: `${location.state}`,
-                    contact: `${inputEmailContact}` // Aqui va lo que sea que se use para definir el nombre, verificar si es así
-                }
-              });
+            console.log(location.state, inputEmailContact)
+            axios.post('/contact/add', {
+                email : location.state,
+                contacts : inputEmailContact
+            });
             setShowModal(false)
         }
 
@@ -131,7 +130,9 @@ function Sidebar({ chats }) {
                 <IconButton>
                     <PersonAddIcon onClick={() => setShowModal(true)} />
                     <Modal title="Crear contacto" onClose={() => setShowModal(false)} show={showModal} onSave={() => handleContactInfo()}>
-                        <input className="sidebar_searchContainer" placeholder='    Introduzca el email del contacto que desea añadir' onChange={e => setInputEmailContact(e.target.value)} value={inputEmailContact}></input>
+                        <form>
+                            <input className="sidebar_searchContainer" placeholder='Introduzca el email del contacto que desea añadir' onChange={e => setInputEmailContact(e.target.value)} value={inputEmailContact}></input>
+                        </form>
                     </Modal>
                 </IconButton>
             </div>
