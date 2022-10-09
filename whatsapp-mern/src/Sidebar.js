@@ -36,7 +36,6 @@ function Sidebar({ chats }) {
             email: `${location.state}`
             }
         }).then((response) => {
-            // Tengo pendiente ver el tema del setState porque no es sincronico y dura mucho para cargarme la información
             setList(response.data[0]?.contacts_info) 
         })
     }, []);
@@ -65,13 +64,24 @@ function Sidebar({ chats }) {
         
         const [inputEmailContact, setInputEmailContact] = useState('');
         const handleContactInfo = () => {
-            // Tengo que hacer el método de create chat en server
-            console.log(location.state, inputEmailContact)
-            axios.post('/contact/add', {
-                email : location.state,
-                contacts : inputEmailContact
-            });
-            setShowModal(false)
+            if (inputEmailContact !== location.state)
+            {
+                axios.get('/user/login', { params: {
+                    email: inputEmailContact
+                  }
+                  }).then(((res) => {
+                    if (res.data.length === 0){
+                        axios.post('/contact/add', {
+                            email : location.state,
+                            contacts : inputEmailContact
+                        });
+                    } 
+                  }))
+                setShowModal(false)
+                window.location.reload()
+            } else {
+                alert("No puede ingresarse a sí mismo como un usuario, favor ingrese un correo electrónico distinto al suyo")
+            }
         }
 
     const [users, setUsers] = useState([]);
@@ -81,32 +91,26 @@ function Sidebar({ chats }) {
     const selectedUsers = users.map(a => a.value);
 
     const handleCreateChat = () => {
-        console.log(users.length)
         if (users.length === 0){
-            // Me tiene que mandar una alerta que se quiere crear un grupo sin personas
+            alert("Error: No ha seleccionado ningún usuario, favor elegir el(los) usuarios que desee")
         }
         else if (users.length === 1){
             var ChatUsers = [];
             ChatUsers.push(location.state)
             ChatUsers.push(users[0]['value'])
-            //setChatUsers(ChatUsers.toString().replace(',', ''))
             setShow(false);
             handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
-            //setChatUsers(ChatUsers)
             console.log(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
         else if (users.length > 1){
-            // Invocar otro modal a modo de formulario donde te permita ingresar el nombre del grupo y pegar el link de una imagen
+
             setShow(false);
             setShow2(true);
-            // Tengo que ver cómo manejo la información de los usuarios para llenar el chatUsers
             selectedUsers.push(location.state)
             setChatUsers(selectedUsers)
         }
     }
     const handlechatInfo = (chatusers, name, picture) => {
-        // Tengo que hacer el método de create chat en server
-        console.log(chatusers, name, picture)
         axios.post('/chat/new', {
             name: name,
             creationTime : new Date().toLocaleTimeString(),
@@ -114,6 +118,7 @@ function Sidebar({ chats }) {
             picture: picture
         });
         setShow2(false);
+        window.location.reload()        
     }
 
   return (

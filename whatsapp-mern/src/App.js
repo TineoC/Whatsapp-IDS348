@@ -21,10 +21,6 @@ function App() {
           name: person.name,
           picture: person.picture,
         })
-        axios.post('/contact/create', {
-          email:person.email,
-          contacts:[]
-        })
       } 
       sessionStorage.setItem('picture', person.picture)
       sessionStorage.setItem('name', person.name)
@@ -32,7 +28,6 @@ function App() {
       nav('/chat', { state: `${person.email}` })
     }))
   }
-
 
   useEffect(() => { 
     /*global google*/

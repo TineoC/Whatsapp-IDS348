@@ -144,17 +144,6 @@ app.get('/contact/search', (req, res) => {
     })
 })
 
-app.post('/contact/create', (req, res) => {
-    const dbContact = req.body
-    Contacts.create(dbContact, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(`contenido contacto creado: \n ${data}`)
-        }
-    })
-})
-
 app.post('/contact/add', (req, res) => {    
     Contacts.updateOne( 
         {email: req.body.email}, // Filter
