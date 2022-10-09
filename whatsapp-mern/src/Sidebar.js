@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./Sidebar.css"
 import { Avatar, IconButton, Button } from "@material-ui/core"
-import { SearchOutlined } from '@material-ui/icons';
+import { SearchOutlined, TimerOutlined } from '@material-ui/icons';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SidebarChat from './SidebarChat';
 import styled from 'styled-components';
@@ -66,11 +66,12 @@ function Sidebar({ chats }) {
         const handleContactInfo = () => {
             if (inputEmailContact !== location.state)
             {
+                console.log(inputEmailContact)
                 axios.get('/user/login', { params: {
                     email: inputEmailContact
                   }
                   }).then(((res) => {
-                    if (res.data.length === 0){
+                    if (res.data.length !== 0){
                         axios.post('/contact/add', {
                             email : location.state,
                             contacts : inputEmailContact
@@ -100,7 +101,6 @@ function Sidebar({ chats }) {
             ChatUsers.push(users[0]['value'])
             setShow(false);
             handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
-            console.log(`${users[0]['picture']}${sessionStorage.getItem('picture')}`);
         }
         else if (users.length > 1){
 
