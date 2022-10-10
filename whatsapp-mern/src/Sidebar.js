@@ -108,7 +108,7 @@ function Sidebar({ chats }) {
                     find: users[0]['value']
                 }
             }).then((response) => {
-                if (response.data.length === 0) {
+                if (response.data.map((el) => el.name).indexOf('') === -1) {
                     handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
                 } else {
                     alert('Ya posee un chat privado con esta persona');
