@@ -31,10 +31,11 @@ db.once('open', ()=> {
     console.log("DB connected")
 
     const msgCollection = db.collection('messagecontents')
+    const chatCollection = db.collection('chatcontents')
+    const chatChangeStream = chatCollection.watch()
     const changeStream = msgCollection.watch()
 
     changeStream.on('change', (change)=>{
-        
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
             pusher.trigger('messages', 'inserted', {
@@ -47,6 +48,21 @@ db.once('open', ()=> {
         console.log('Ha ocurrido un error')
     } 
     });
+
+    chatChangeStream.on('change', (change)=> {
+        if (change.operationType === 'insert') {
+            const chatDetails = change.fullDocument;
+            pusher.trigger('chats', 'inserted', {
+                name: chatDetails.name,
+                users: chatDetails.users,
+                creationTime: chatDetails.creationTime,
+                picture: chatDetails.picture,
+            })
+        } else {
+            console.log("Ha ocurrido un error")
+        }
+    })
+
 });
 
 app.get('/messages/sync', (req, res) => {

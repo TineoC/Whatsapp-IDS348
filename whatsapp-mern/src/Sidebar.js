@@ -130,8 +130,7 @@ function Sidebar({ chats }) {
             users: chatusers,
             picture: picture
         });
-        setShow2(false);
-        window.location.reload()        
+        setShow2(false);    
     }
 
   return (

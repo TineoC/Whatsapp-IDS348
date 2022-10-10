@@ -51,6 +51,23 @@ function Application() {
     };
   }, [messages]);
 
+  useEffect(() => {
+    const pusher = new Pusher('3d8a99912b841f62956d', {
+      cluster: 'us2',
+    });
+
+    const channel = pusher.subscribe('chats');
+    channel.bind('inserted', (newChat) => {
+      setChats([...chats, newChat]);
+    });
+    console.log(chats)
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [chats]);
+
   return (
     <div className="app">
       <div className="app_body">
