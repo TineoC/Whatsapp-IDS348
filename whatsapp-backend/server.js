@@ -34,7 +34,6 @@ db.once('open', ()=> {
     const changeStream = msgCollection.watch()
 
     changeStream.on('change', (change)=>{
-        console.log(change)
         
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
@@ -71,7 +70,7 @@ app.get('/user/login', (req, res) => {
 })
 
 app.get('/chat/search', (req, res) => {
-    Chats.find(req.query, (err, data) => { // En el req.query tengo que pasarle el nombre del usuario
+    Chats.find(req.query, (err, data) => { 
         if(err) {
             res.status(500).send(err)
         } else {

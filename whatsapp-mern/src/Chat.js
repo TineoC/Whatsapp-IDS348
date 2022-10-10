@@ -17,15 +17,18 @@ function Chat({ messages }) {
   let { id } = useParams()
 
   const sendMessage = async () => {
-    await axios.post('/messages/new', {
-      message: input,
-      name: userName,
-      timestamp: new Date().toLocaleTimeString('default', {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-      chat: id
-    });
+    if (input !== "")
+    {
+      await axios.post('/messages/new', {
+        message: input,
+        name: userName,
+        timestamp: new Date().toLocaleTimeString('default', {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+        chat: id
+      });
+    }
 
     setInput('');
   }

@@ -52,6 +52,8 @@
     margin-left: auto;
     background-color: #dcf8c6;
     overflow-wrap: break-word;
+    max-width: 60%;
+    min-width: 10%;
 }
 
 .chat_timestamp {
@@ -66,12 +68,14 @@
     font-size: xx-small;
 }
 
-.chat_footer > div {
+.chat_footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 62px;
     border-top: 1px solid lightgray;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .chat_footer > .MuiSvgIcon-root{

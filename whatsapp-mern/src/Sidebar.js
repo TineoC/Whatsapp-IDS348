@@ -76,7 +76,9 @@ function Sidebar({ chats }) {
                             email : location.state,
                             contacts : inputEmailContact
                         });
-                    } 
+                    } else {
+                        alert("")
+                    }
                   }))
                 setShowModal(false)
                 window.location.reload()
@@ -100,7 +102,18 @@ function Sidebar({ chats }) {
             ChatUsers.push(location.state)
             ChatUsers.push(users[0]['value'])
             setShow(false);
-            handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
+            axios.get('/chat/searchBy', {
+                params: {
+                    main: `${location.state}`,
+                    find: users[0]['value']
+                }
+            }).then((response) => {
+                if (response.data.length === 0) {
+                    handlechatInfo(ChatUsers, '', users[0]['picture'] + sessionStorage.getItem('picture') );
+                } else {
+                    alert('Ya posee un chat privado con esta persona');
+                }
+            })
         }
         else if (users.length > 1){
 
@@ -187,7 +200,6 @@ function Sidebar({ chats }) {
 }
 
 export default Sidebar;
-
 
 const SidebarButton = styled(Button)`
     width: 100%;
