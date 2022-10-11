@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import "./Chat.css";
 import { Avatar, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
@@ -45,6 +45,12 @@ function Chat({ messages }) {
         setChat(response.data);
       });
   }, [id]);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   return (
     <div className="chat">
@@ -108,7 +114,9 @@ function Chat({ messages }) {
             {/*Para hacer la lógica de autenticación tengo que revisar si el nombre del usuario que envió el mensaje es cual o quién e igual concatenarle lo e receiver*/}
             <span className="chat_name">{message.name}</span>
             {message.message}
-            <span className="chat_timestamp">{message.timestamp}</span>
+            <span ref={ref} className="chat_timestamp">
+              {message.timestamp}
+            </span>
           </p>
         ))}
       </div>
