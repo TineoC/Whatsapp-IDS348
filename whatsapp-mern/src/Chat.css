@@ -90,6 +90,7 @@
 	height: 62px;
 	border-top: 1px solid lightgray;
 	max-width: 100%;
+	width: 100%;
 	overflow-wrap: break-word;
 }
 
