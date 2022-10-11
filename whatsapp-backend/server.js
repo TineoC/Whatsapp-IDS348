@@ -3,203 +3,209 @@ import mongoose from "mongoose";
 import Pusher from "pusher";
 import cors from "cors";
 import Messages from "./dbMessages.js";
-import Users from "./dbUsers.js"
-import Chats from "./dbChats.js"
+import Users from "./dbUsers.js";
+import Chats from "./dbChats.js";
 import Contacts from "./dbContacts.js";
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from "dotenv";
+dotenv.config();
 
-const app = express()
-const port = process.env.PORT || 9000
+const app = express();
+const port = process.env.PORT || 9000;
 const pusher = new Pusher({
-    appId: process.env.PUSHER_APPID,
-    key: process.env.PUSHER_KEY,
-    secret: process.env.PUSHER_SECRET,
-    cluster: process.env.PUSHER_CLUSTER,
-    useTLS: process.env.PUSHER_USETLS
+  appId: process.env.PUSHER_APPID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: process.env.PUSHER_CLUSTER,
+  useTLS: process.env.PUSHER_USETLS,
 });
 
 const pusher2 = new Pusher({
-    appId: process.env.PUSHER_APPID2,
-    key: process.env.PUSHER_KEY2,
-    secret: process.env.PUSHER_SECRET2,
-    cluster: process.env.PUSHER_CLUSTER2,
-    useTLS: process.env.PUSHER_USETLS2
+  appId: process.env.PUSHER_APPID2,
+  key: process.env.PUSHER_KEY2,
+  secret: process.env.PUSHER_SECRET2,
+  cluster: process.env.PUSHER_CLUSTER2,
+  useTLS: process.env.PUSHER_USETLS2,
 });
 
-app.use(express.json())
+app.use(express.json());
 
 // Chequear e investigar acerca de CORS module
-app.use(cors())
+app.use(cors());
 
 mongoose.connect(process.env.DB_CONNECTION_URL);
 
-const db = mongoose.connection
-db.once('open', ()=> {
-    console.log("DB connected")
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("DB connected");
 
-    const msgCollection = db.collection('messagecontents')
-    const changeStream = msgCollection.watch()
-    const chatCollection = db.collection('chatcontents')
-    const chatChangeStream = chatCollection.watch()
+  const msgCollection = db.collection("messagecontents");
+  const changeStream = msgCollection.watch();
+  const chatCollection = db.collection("chatcontents");
+  const chatChangeStream = chatCollection.watch();
 
-    changeStream.on('change', (change)=>{
-        if (change.operationType === 'insert') {
-            const messageDetails = change.fullDocument;
-            pusher2.trigger('messages', 'inserted', {
-            name: messageDetails.name,
-            message: messageDetails.message,
-            timestamp: messageDetails.timestamp,
-            chat: messageDetails.chat,
-        });
+  changeStream.on("change", (change) => {
+    if (change.operationType === "insert") {
+      const messageDetails = change.fullDocument;
+      pusher2.trigger("messages", "inserted", {
+        name: messageDetails.name,
+        message: messageDetails.message,
+        timestamp: messageDetails.timestamp,
+        chat: messageDetails.chat,
+      });
     } else {
-        console.log('Ha ocurrido un error')
-    } 
-    });
+      console.log("Ha ocurrido un error");
+    }
+  });
 
-    chatChangeStream.on('change', (change)=> {
-        if (change.operationType === 'insert') {
-            const chatDetails = change.fullDocument;
-            pusher.trigger('chats', 'inserted', {
-                name: chatDetails.name,
-                users: chatDetails.users,
-                creationTime: chatDetails.creationTime,
-                picture: chatDetails.picture,
-            })
-        } else {
-            console.log("Ha ocurrido un error")
-        }
-    })
-
+  chatChangeStream.on("change", (change) => {
+    if (change.operationType === "insert") {
+      const chatDetails = change.fullDocument;
+      pusher.trigger("chats", "inserted", {
+        name: chatDetails.name,
+        users: chatDetails.users,
+        creationTime: chatDetails.creationTime,
+        picture: chatDetails.picture,
+      });
+    } else {
+      console.log("Ha ocurrido un error");
+    }
+  });
 });
 
-app.get('/messages/sync', (req, res) => {
-    Messages.find(req.query, (err, data) => {
-        if (err) {
-            res.status(500).send(err)
-        } else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/messages/sync", (req, res) => {
+  Messages.find(req.query, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
 
-app.get('/user/login', (req, res) => {
-    Users.find(req.query, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/user/login", (req, res) => {
+  Users.find(req.query, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
 
-app.get('/chat/search', (req, res) => {
-    Chats.find(req.query, (err, data) => { 
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/chat/search", (req, res) => {
+  Chats.find(req.query, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
 
-app.get('/chat/searchBy', (req, res) => {
-    Chats.find( {users: { $all: [ req.query.main, req.query.find ]}} ,(err, data) => { 
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/chat/searchBy", (req, res) => {
+  Chats.find(
+    { users: { $all: [req.query.main, req.query.find] } },
+    (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(data);
+      }
+    }
+  );
+});
 
-app.get('/chat/get', (req, res) => {
-    Chats.find(req.query, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else{
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/chat/get", (req, res) => {
+  Chats.find(req.query, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
 
-app.post('/chat/new', (req, res) => {
-    Chats.create(req.body, (err, data) =>{
-        if(err) {
-            res.status(500).send(err)
-        } else{
-            res.status(200).send(`nuevo chat creado: \n${data}`)
-        }
-    })
-})
+app.post("/chat/new", (req, res) => {
+  Chats.create(req.body, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(`nuevo chat creado: \n${data}`);
+    }
+  });
+});
 
-app.post('/messages/new', (req, res) => {
-    const dbMessage = req.body
+app.post("/messages/new", (req, res) => {
+  const dbMessage = req.body;
 
-    Messages.create(dbMessage, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(`nuevo mensaje creado: \n ${data}`)
-        }
-    })
-})
+  Messages.create(dbMessage, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(`nuevo mensaje creado: \n ${data}`);
+    }
+  });
+});
 
-app.post('/user/new', (req, res) => {
-    const dbUser = req.body
-    Users.create(dbUser, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(`nuevo usuario creado: \n ${data}`)
-        }
-    })
-})
+app.post("/user/new", (req, res) => {
+  const dbUser = req.body;
+  Users.create(dbUser, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(`nuevo usuario creado: \n ${data}`);
+    }
+  });
+});
 
-app.get('/contact/search', (req, res) => {
-    const dbUser = req.query
-    Contacts.find(dbUser, {"_id":0, "email":0, "__v": 0}, (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(200).send(data)
-        }
-    })
-})
+app.get("/contact/search", (req, res) => {
+  const dbUser = req.query;
+  Contacts.find(dbUser, { _id: 0, email: 0, __v: 0 }, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
 
-app.post('/contact/add', (req, res) => {    
-    Contacts.updateOne( 
-        {email: req.body.email}, // Filter
-        {$push: {"contacts": req.body.contacts}}, // Update
-        {upsert: true} // add document with req.body._id if not exists 
-    ,(err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(`Nuevo contacto agregado: \n ${data}`)
-        }
-    })
-})
+app.post("/contact/add", (req, res) => {
+  Contacts.updateOne(
+    { email: req.body.email }, // Filter
+    { $push: { contacts: req.body.contacts } }, // Update
+    { upsert: true }, // add document with req.body._id if not exists
+    (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(201).send(`Nuevo contacto agregado: \n ${data}`);
+      }
+    }
+  );
+});
 
-app.get('/contact/select', (req, res) => { // Tengo que pasarle los parametros definiendolos jevi como en el chat/search
-    Contacts.aggregate([ 
-        {$match : {email: req.query.email}},
-        {
-           $lookup:
-              {
-                from: "usercontents",
-                localField: "contacts",
-                foreignField: "email",
-                as: "contacts_info"
-             }
-        }
-     ], (err, data) => {
-        if(err) {
-            res.status(500).send(err)
-        } else {
-            res.status(201).send(data)
-        }
-     })
-})
+app.get("/contact/select", (req, res) => {
+  // Tengo que pasarle los parametros definiendolos jevi como en el chat/search
+  Contacts.aggregate(
+    [
+      { $match: { email: req.query.email } },
+      {
+        $lookup: {
+          from: "usercontents",
+          localField: "contacts",
+          foreignField: "email",
+          as: "contacts_info",
+        },
+      },
+    ],
+    (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(201).send(data);
+      }
+    }
+  );
+});
 
-app.listen(port, () => console.log(`Listening on localhost: ${port}`))
+app.listen(port, () => console.log(`Listening on localhost: ${port}`));

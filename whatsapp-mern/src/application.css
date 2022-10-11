@@ -1,15 +1,15 @@
 .app {
-    display: grid;
-    place-items: center;
-    height: 100vh;
-    background-color: #dadbd3;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: #dadbd3;
 }
 
 .app_body {
-    display: flex;
-    background-color: #ededed;
-    height: 100%;
-    width: 100%;
-    box-shadow: -1px 4px 20px -6px rgba(0, 2, 0, 0.75);
-    overflow: hidden;
+  display: flex;
+  background-color: #ededed;
+  height: 100%;
+  width: 100%;
+  box-shadow: -1px 4px 20px -6px rgba(0, 2, 0, 0.75);
+  overflow: hidden;
 }

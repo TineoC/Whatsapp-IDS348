@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const whatsappSchema = mongoose.Schema({
-    email: String,
-    contacts: Array
+  email: String,
+  contacts: Array,
 });
 
-export default mongoose.model('contactscontents', whatsappSchema)
+export default mongoose.model("contactscontents", whatsappSchema);
