@@ -68,7 +68,7 @@
     font-size: xx-small;
 }
 
-.chat_footer {
+.chat_footer > div {
     display: flex;
     justify-content: space-between;
     align-items: center;

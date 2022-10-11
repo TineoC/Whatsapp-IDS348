@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import './application.css';
 import Chat from "./Chat";
@@ -14,16 +13,14 @@ function Application() {
   const location = useLocation()
   let  { id } = useParams()
   
-  const fetchMessage = () => {
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
     axios.get('/messages/sync', { params: {
       chat: `${ id }`}
     }).then((response) => {
       setMessages(response.data)
     });
-  }
-  
-  const [messages, setMessages] = useState([]);
-  useEffect(() => {fetchMessage()}, []);
+  }, []);
 
   const [chats, setChats] = useState([]);
   useEffect(() => {
@@ -60,7 +57,6 @@ function Application() {
     channel.bind('inserted', (newChat) => {
       setChats([...chats, newChat]);
     });
-    console.log(chats)
 
     return () => {
       channel.unbind_all();

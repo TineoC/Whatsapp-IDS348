@@ -31,9 +31,9 @@ db.once('open', ()=> {
     console.log("DB connected")
 
     const msgCollection = db.collection('messagecontents')
+    const changeStream = msgCollection.watch()
     const chatCollection = db.collection('chatcontents')
     const chatChangeStream = chatCollection.watch()
-    const changeStream = msgCollection.watch()
 
     changeStream.on('change', (change)=>{
         if (change.operationType === 'insert') {
