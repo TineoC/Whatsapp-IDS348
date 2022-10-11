@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { Avatar, IconButton, Button } from "@material-ui/core";
+import { Avatar, IconButton, Typography } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import SidebarChat from "./SidebarChat";
@@ -10,7 +10,10 @@ import Modal from "./components/Modal";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import axios from "./axios";
-import LogoutIcon from "@mui/icons-material/Logout";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 function Sidebar({ chats }) {
 	let nav = useNavigate();
@@ -149,15 +152,21 @@ function Sidebar({ chats }) {
 		setShow2(false);
 	};
 
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
+	const handleClick = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
+
 	return (
 		<div className='sidebar'>
 			<div className='sidebar_header'>
 				<Avatar src={picture} />
 
 				<div>
-					<IconButton onClick={() => handleSignOut()}>
-						<LogoutIcon color='error' />
-					</IconButton>
 					<IconButton onClick={() => setShowModal(true)}>
 						<PersonAddIcon />
 						<Modal
@@ -178,6 +187,33 @@ function Sidebar({ chats }) {
 							</form>
 						</Modal>
 					</IconButton>
+
+					<IconButton
+						aria-controls={open ? "basic-menu" : undefined}
+						aria-haspopup='true'
+						aria-expanded={open ? "true" : undefined}
+						onClick={handleClick}
+					>
+						<MoreHorizIcon />
+					</IconButton>
+					<Menu
+						id='basic-menu'
+						anchorEl={anchorEl}
+						open={open}
+						onClose={handleClose}
+						MenuListProps={{
+							"aria-labelledby": "basic-button",
+						}}
+					>
+						<MenuItem
+							onClick={() => {
+								handleClose();
+								handleSignOut();
+							}}
+						>
+							<Typography>Log out</Typography>
+						</MenuItem>
+					</Menu>
 				</div>
 			</div>
 			<div className='sidebar_newchatContainer'>
