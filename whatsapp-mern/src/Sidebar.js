@@ -43,7 +43,7 @@ function Sidebar({ chats }) {
 			.then((response) => {
 				setList(response.data[0]?.contacts_info);
 			});
-	}, []);
+	}, [location.state]);
 
 	const contactsOptions = list?.map((contact) => ({
 		value: contact.email,
