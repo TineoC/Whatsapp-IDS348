@@ -19,6 +19,14 @@ const pusher = new Pusher({
     useTLS: process.env.PUSHER_USETLS
 });
 
+const pusher2 = new Pusher({
+    appId: process.env.PUSHER_APPID2,
+    key: process.env.PUSHER_KEY2,
+    secret: process.env.PUSHER_SECRET2,
+    cluster: process.env.PUSHER_CLUSTER2,
+    useTLS: process.env.PUSHER_USETLS2
+});
+
 app.use(express.json())
 
 // Chequear e investigar acerca de CORS module
@@ -31,14 +39,14 @@ db.once('open', ()=> {
     console.log("DB connected")
 
     const msgCollection = db.collection('messagecontents')
+    const changeStream = msgCollection.watch()
     const chatCollection = db.collection('chatcontents')
     const chatChangeStream = chatCollection.watch()
-    const changeStream = msgCollection.watch()
 
     changeStream.on('change', (change)=>{
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
-            pusher.trigger('messages', 'inserted', {
+            pusher2.trigger('messages', 'inserted', {
             name: messageDetails.name,
             message: messageDetails.message,
             timestamp: messageDetails.timestamp,

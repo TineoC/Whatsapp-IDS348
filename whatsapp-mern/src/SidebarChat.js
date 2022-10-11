@@ -4,9 +4,6 @@ import { Avatar } from "@material-ui/core"
 import { useLocation } from 'react-router-dom';
 
 function SidebarChat({ chat }) {
-  // Agregar los parámetros de id y usuarios en el chat para así buscar los mensajes y eso tal vez
-  // Coódigo para obtener último mensaje > db.messagecontents.find({ chat : `${chat.id}`}).sort({_id:-1}).limit(1);
-  // Entiendo que debe ser alg así
   const location = useLocation();
 
   const [recipient, setRecipient] = useState('');
