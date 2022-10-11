@@ -33,7 +33,7 @@ function Application() {
 
 
   useEffect(() => {
-    const pusher = new Pusher('3d8a99912b841f62956d', {
+    const pusher = new Pusher('858cc04faf26ef2afed9', { // 858cc04faf26ef2afed9
       cluster: 'us2',
     });
 
