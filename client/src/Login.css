@@ -1,0 +1,18 @@
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #ededed;
+}
+
+.login h1 {
+  margin-bottom: 0.5em;
+}
+
+.main {
+  border-radius: 1em;
+  border: 1px solid black;
+  padding: 2em 3em;
+}

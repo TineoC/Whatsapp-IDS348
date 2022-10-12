@@ -3,6 +3,8 @@ import jwt_decode from "jwt-decode";
 import axios from "./axios";
 import { useNavigate } from "react-router-dom";
 
+import "./login.css";
+
 function App() {
   let nav = useNavigate();
 
@@ -49,10 +51,11 @@ function App() {
   }, [nav]);
 
   return (
-    <div className="App">
-      <h1>Login</h1>
-      <br />
-      <div id="SignInDiv"></div>
+    <div className="login">
+      <div className="main">
+        <h1>Login</h1>
+        <div id="SignInDiv"></div>
+      </div>
     </div>
   );
 }
