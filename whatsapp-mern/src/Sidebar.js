@@ -169,7 +169,7 @@ function Sidebar({ chats }) {
           <IconButton onClick={() => setShowModal(true)}>
             <PersonAddIcon />
             <Modal
-              title="Add new contact"
+              title="Crear contacto"
               onClose={() => setShowModal(false)}
               show={showModal}
               onSave={() => handleContactInfo()}
@@ -177,10 +177,10 @@ function Sidebar({ chats }) {
               <form>
                 <input
                   className="sidebar_searchContainer"
-                  placeholder="Write down the email of the new contact..."
+                  placeholder="Introduzca el email del contacto que desea añadir"
                   onChange={(e) => setInputEmailContact(e.target.value)}
                   value={inputEmailContact}
-                />
+                ></input>
               </form>
             </Modal>
           </IconButton>
@@ -262,7 +262,7 @@ function Sidebar({ chats }) {
           <SearchOutlined />
           <input
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Search a contact..."
+            placeholder="Busque o inicie un nuevo chat"
             type="text"
             value={input}
           />
