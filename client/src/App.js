@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import axios from "./axios";
 import { useNavigate } from "react-router-dom";
 
-import "./login.css";
+import "./Login.css";
 
 function App() {
   let nav = useNavigate();
