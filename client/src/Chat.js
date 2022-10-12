@@ -4,7 +4,6 @@ import { Avatar, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import SendRoundedIcon from "@material-ui/icons/SendRounded";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import axios from "./axios";
 import { useLocation, useParams } from "react-router-dom";
 import InputEmoji from "react-input-emoji";
@@ -83,22 +82,6 @@ function Chat({ messages }) {
             <IconButton>
               <SearchIcon />
             </IconButton>
-            <Fragment>
-              <input
-                accept="image/*"
-                id="icon-button-photo"
-                type="file"
-                hidden="true"
-              />
-              <label htmlFor="icon-button-photo">
-                <IconButton component="span">
-                  <AttachFileIcon />
-                </IconButton>
-              </label>
-            </Fragment>
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
           </div>
         )}
       </div>
@@ -130,6 +113,20 @@ function Chat({ messages }) {
               onEnter={sendMessage}
               placeholder="Type a message"
             />
+
+            <Fragment>
+              <input
+                accept="image/*"
+                id="icon-button-photo"
+                type="file"
+                hidden={true}
+              />
+              <label htmlFor="icon-button-photo">
+                <IconButton component="span">
+                  <AttachFileIcon />
+                </IconButton>
+              </label>
+            </Fragment>
 
             <IconButton onClick={sendMessage}>
               <SendRoundedIcon />
