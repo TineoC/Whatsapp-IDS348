@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import "./Modal.css";
+import ErrorIcon from "@mui/icons-material/Error";
+import { Box } from "@mui/material";
 
 const Modal = (props) => {
   useEffect(() => {
@@ -29,18 +31,36 @@ const Modal = (props) => {
             <h4 className="modal-title">{props.title}</h4>
           </div>
           <div className="modal-body">{props.children}</div>
-          <div className="modal-footer">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+            className="modal-footer"
+          >
             <button onClick={props.onClose} className="button">
               Close
             </button>
+
             <button className="Save" onClick={props.onSave}>
               Save
             </button>
-          </div>
+
+            <NotFoundError />
+          </Box>
         </div>
       </div>
     </CSSTransition>,
     document.getElementById("root")
+  );
+};
+
+const NotFoundError = () => {
+  return (
+    <Box>
+      <ErrorIcon color="error" />;
+    </Box>
   );
 };
 
