@@ -7,17 +7,26 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import axios from "./axios";
 import { useLocation, useParams } from "react-router-dom";
 import InputEmoji from "react-input-emoji";
+import { Image } from "cloudinary-react";
 
 function Chat({ messages }) {
   const location = useLocation();
   const userName = sessionStorage.getItem("name");
+
   const [input, setInput] = useState("");
+
+  const [image, setImage] = useState(null);
+
   let { id } = useParams();
 
   const sendMessage = async () => {
     if (input !== "") {
+      // solo hay texto
+      if (image) uploadImage(image);
+
       await axios.post("/messages/new", {
         message: input,
+        imgURL: "",
         name: userName,
         timestamp: new Date().toLocaleTimeString("default", {
           hour: "2-digit",
@@ -27,7 +36,14 @@ function Chat({ messages }) {
       });
     }
 
+    if (image) {
+      // solo hay imagen
+
+      await uploadImage(image);
+    }
+
     setInput("");
+    setImage(null);
   };
 
   const [chat, setChat] = useState([]);
@@ -50,6 +66,36 @@ function Chat({ messages }) {
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
+
+  const uploadImage = () => {
+    const formData = new FormData();
+
+    formData.append("file", image);
+    formData.append("upload_preset", "IDS348-whatsapp");
+    formData.append("cloud_name", "diofidb5j");
+
+    fetch("https://api.cloudinary.com/v1_1/diofidb5j/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then(async (result) => {
+        console.log(result);
+        console.log(result.url);
+
+        await axios.post("/messages/new", {
+          message: "",
+          imgURL: result.url,
+          name: userName,
+          timestamp: new Date().toLocaleTimeString("default", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          chat: id,
+        });
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <div className="chat">
@@ -97,6 +143,13 @@ function Chat({ messages }) {
             {/*Para hacer la lógica de autenticación tengo que revisar si el nombre del usuario que envió el mensaje es cual o quién e igual concatenarle lo e receiver*/}
             <span className="chat_name">{message.name}</span>
             {message.message}
+            {message.imgURL && (
+              <Image
+                style={{ width: 200 }}
+                cloudName="diofidb5j"
+                publicId={message.imgURL}
+              />
+            )}
             <span ref={ref} className="chat_timestamp">
               {message.timestamp}
             </span>
@@ -116,6 +169,9 @@ function Chat({ messages }) {
 
             <Fragment>
               <input
+                onChange={(e) => {
+                  setImage(e.target.files[0]);
+                }}
                 accept="image/*"
                 id="icon-button-photo"
                 type="file"

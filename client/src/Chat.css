@@ -4,6 +4,10 @@
   flex: 0.7;
 }
 
+.chat-image {
+  max-width: 50%;
+}
+
 .chat_header {
   padding: 20px;
   display: flex;
